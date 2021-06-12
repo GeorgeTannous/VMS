@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon/favicon.ico' %}"/>
+    <title> Login - {{ p_info.get.name }} </title>
+</head>
+
+<link type="text/css" href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+<link type="text/css" href="{% static 'css/log_in.css' %}" rel="stylesheet">
+<link type="text/css" href="{% static 'css/notifications.css' %}" rel="stylesheet">
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'js/parsley.min.js' %}"></script>
+
+<style>
+    .form-font-size {
+        font-size: xx-small;
+    }
+
+    .parsley-errors-list li {
+        padding: 0px;
+        color: #FF0000;
+    }
+
+</style>
+
+<body>
+<div class="wrapper fadeInDown">
+  <div id="formContent">
+
+    <!-- Title + Icon -->
+        <div class="fadeIn first">
+            <h1 align="center">{{ p_info.get.name }}</h1><br>
+            {% for message in messages %}
+                <div class="container" >
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        <a href="#" class="closealert" data-dismiss="alert" aria-label="closealert">&times;</a>
+                        {{ message }}
+                    </div>
+                </div>
+            {% endfor %}
+
+            <img style="padding-top: 25px; padding-bottom: 25px;" src="{{ p_info.get.img.url }}" id="icon" />
+
+        </div>
+
+    <!-- Input Form -->
+    <form action="" method="post" data-parsley-validate="" id="input_form" name="login_form" class="form-font-size">
+        {% csrf_token %}
+        <input type="email" class="fadeIn second" name="email" placeholder="Email" autocomplete="off" required
+                data-parsley-required="true" data-parsley-type="email" data-parsley-required-message="Please Enter your Email">
+
+        <input type="password" class="fadeIn third" name="password" placeholder="Password" autocomplete="off" required
+                data-parsley-required="true" data-parsley-required-message="Please Enter your Password">
+
+        <br><br><br>
+        <input type="submit" class="fadeIn fourth" value="Log In">
+    </form>
+
+    <div id="formFooter">
+        <a href="\register" class="fadeIn fourth">Signup</a>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

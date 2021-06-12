@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="w3-main" style="margin-left:8%; margin-right:8%; margin-top:5%;">
+    <h1 class="page-header">Vacations</h1>
+
+    <p>
+        <button type="button" class="btn btn-primary show-form">
+            <span class="glyphicon glyphicon-plus"></span>
+            New Vacation
+        </button>
+    </p>
+    <table id="myTable" class="table table-responsive table-hover " style="width:100%; overflow-x: hidden;">
+        <thead>
+            <th>StartDate</th>
+            <th>EndDate</th>
+            <th>Description</th>
+            <th></th>
+        </thead>
+    </table>
+</div>
+
+<div class="modal fade" id="modal-vacation">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+    $(document).ready(function() {
+        var abc = "'Are You Sure You Want to Delete This Vacation?'";
+        var table = $('#myTable').DataTable({
+            serverSide: true,
+            ajax: "/api/main/?format=datatables",
+            columns: [
+              {data: "from_date_time", //get from_date_time and change to more user friendly format
+                render: function(data, type, row){
+                if(type === "sort" || type === "type"){
+                    return data;
+                }
+                return moment(data).format("DD-MM-YYYY - HH:mm");
+                }
+              },
+              {data: "to_date_time", //get to_date_time and change to more user friendly format
+                render: function(data, type, row){
+                if(type === "sort" || type === "type"){
+                    return data;
+                }
+                return moment(data).format("DD-MM-YYYY - HH:mm");
+                }
+              },
+              {data: "description"},
+                {
+                data: 'id',
+
+                sortable: false,
+                    render: function ( data, type, row ) {
+                    return '<form method="POST" action="delete_vacation?v_id='+data+'" onsubmit="return confirm('+abc+');"> {% csrf_token %} <a type="button" href="vacation_update?v_id='+data+'" class="btn btn-warning btn-sm"> <span class="glyphicon glyphicon-pencil"></span> Edit </a> <button type="submit" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash"></span> Delete </button></form>';
+                    }
+                }
+            ],
+            scrollY: 310,
+            scrollCollapse: true,
+        });
+    });
+</script>
+{% endblock %}

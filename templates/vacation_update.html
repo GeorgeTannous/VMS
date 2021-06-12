@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon/favicon.ico' %}"/>
+    <title> Edit Vacation - {{ p_info.get.name }} </title>
+
+    <link type="text/css" href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'css/register.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'css/notifications.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'css/datepicker.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'css/w3Schools-api.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'css/font.css' %}" rel="stylesheet">
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'js/datepicker.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/parsley.min.js' %}"></script>
+    <script src="{% static 'js/vacation_calc.js' %}"></script>
+</head>
+
+
+<style>
+    .form-font-size {
+        font-size: xx-small;
+    }
+
+    .parsley-errors-list li {
+        padding: 0px;
+        color: #FF0000;
+    }
+
+</style>
+
+<body>
+
+<!-- Top container -->
+<div class="w3-bar w3-top w3-black w3-large" style="z-index:10">
+    <a href="index"><button class="w3-bar-item w3-button w3-hover-none"><img src= '{{ p_info.get.img.url }}' width='150' height='24' title='Home'></i></button></a>
+    <span class="w3-bar-item w3-medium w3-right"><a style="font-size:xx-small" href="\logout">Logout</a></span>
+    <span class="w3-bar-item w3-medium w3-right">{{ user.user_name }}</span>
+</div>
+
+
+<div class="wrapper fadeInDown">
+  <div id="formContent">
+
+    <!-- Title + Icon + notifications -->
+        <div class="fadeIn first">
+            <h1 align="center">Update Vacation</h1><br>
+            {% for message in messages %}
+                <div class="container" >
+                    <div class="alert alert-success alert-dismissible fade show">
+                        <a href="#" class="closealert" data-dismiss="alert" aria-label="closealert">&times;</a>
+                        {{ message }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+  {% for vac_info in  vac_infos %}
+    <!-- Input Form -->
+    <form action="vacation_update?v_id={{ vac_info.id }}" method="post" data-parsley-validate="" class="form-font-size">
+        {% csrf_token %}
+
+
+            <input name="from_date" id="fdate" value="{{ vac_info.from_date_time }}" type="text" class="fadeIn first" placeholder="From Date & Time" data-parsley-required="true" data-parsley-required-message="Date is required" />
+            <input name="to_date" id="tdate" value="{{ vac_info.to_date_time }}" type="text" class="fadeIn first" placeholder="To Date & Time" data-parsley-required="true"  data-parsley-required-message="Date is required" data-parsley-mindate="2015/01/01" data-date-format="YYYY/MM/DD" />
+
+            <p style="font-size:small">Total Vacation Days: <span id="dif"></span></p>
+
+            <div style="padding-top: 5px; padding-left: 33px; padding-right: 33px">
+                <select name="vac_type" class="form-control"  class="fadeIn third" data-parsley-required="true" data-parsley-required-message="Vacation Type is required.">
+                    <option selected value="{{ vac_info.description }}">{{ vac_info.description }}</option>
+                    <option value="Annual Leave"> Annual Leave </option>
+                    <option value="Bereavement Leave"> Bereavement Leave </option>
+                    <option value="Medical Leave"> Medical Leave </option>
+                </select>
+            </div>
+
+        <br><br>
+        <input type="submit" class="fadeIn fourth" value="Update">
+
+    </form>
+  {% endfor %}
+
+  </div>
+</div>
+
+<script type="text/javascript">
+    window.ParsleyValidator
+        .addValidator('mindate', function(value, requirement) {
+            // is valid date?
+            var timestamp = Date.parse(value),
+                minTs = Date.parse(requirement);
+
+            return isNaN(timestamp) ? false : timestamp >= minTs;
+        }, 32)
+        .addMessage('en', 'mindate', '<div class="date-error">Date should be greater than or equal to %s</div>');
+
+    //set min as value of fdate
+    document.getElementById("fdate").onchange = function () {
+        var input = document.getElementById("tdate");
+        input.setAttribute("data-parsley-mindate", this.value);
+    }
+</script>
+
+</body>
+</html>

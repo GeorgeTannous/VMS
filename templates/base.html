@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon/favicon.ico' %}"/>
+    <link type="text/css" href="{% static 'css/w3Schools-api.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'css/font.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/dataTables.bootstrap4.min.css' %}">
+    <link type="text/css" href="{% static 'css/datepicker.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+    <title>Home - {{ p_info.get.name }}</title>
+</head>
+
+<style>
+  html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
+</style>
+
+{% if user.is_authenticated %}
+<body class="w3-light-grey">
+<!-- Top container -->
+<div class="w3-bar w3-top w3-black w3-large" style="z-index:1">
+    <a href="index"><button class="w3-bar-item w3-button w3-hover-none"><img src= '{{ p_info.get.img.url }}' width='150' height='24' title='Home'></i></button></a>
+    <span class="w3-bar-item w3-medium w3-right"><a style="font-size:xx-small" href="\logout">Logout</a></span>
+    <span class="w3-bar-item w3-medium w3-right">{{ user.user_name }}</span>
+</div>
+{% block content %}
+
+{% endblock %}
+
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/moment.min.js' %}"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
+<script src="{% static 'js/plugin.js' %}"></script>
+<script src="{% static 'js/vacation_calc.js' %}"></script>
+<script src="{% static 'js/datepicker.js' %}"></script>
+
+{% block javascript %}
+{% endblock %}
+
+</body>
+{% endif %}
+</html>

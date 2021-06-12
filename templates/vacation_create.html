@@ -1,0 +1,54 @@
+{% load crispy_forms_tags %}
+{% load static %}
+
+<style>
+    .form-font-size {
+        font-size: xx-small;
+    }
+
+    .parsley-errors-list li {
+        padding: 0px;
+        color: #FF0000;
+    }
+</style>
+
+<form method="post" data-url="{% url 'vacation_create' %}" class="create-form" data-parsley-validate="">
+    {% csrf_token %}
+    <div class="modal-header">
+    <h5 class="modal-title">Create Vacation</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+    {{ form|crispy }}
+        <p style="font-size:small">Total Vacation Days: <span id="dif"></span></p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Create</button>
+    </div>
+
+</form>
+
+<script src="{% static 'js/parsley.min.js' %}"></script>
+<script src="{% static 'js/vacation_calc.js' %}"></script>
+<script src="{% static 'js/datepicker.js' %}"></script>
+<script type="text/javascript">
+    window.ParsleyValidator
+        .addValidator('mindate', function(value, requirement) {
+            // is valid date?
+            var timestamp = Date.parse(value),
+                minTs = Date.parse(requirement);
+
+            return isNaN(timestamp) ? false : timestamp >= minTs;
+        }, 32)
+        .addMessage('en', 'mindate', '<div class="date-error">Date should be greater than or equal to %s</div>');
+
+    //set min as value of fdate
+    document.getElementById("fdate").onchange = function () {
+        var input = document.getElementById("tdate");
+        input.setAttribute("data-parsley-mindate", this.value);
+    }
+
+</script>
