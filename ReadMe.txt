@@ -1,4 +1,4 @@
-1 - Create Sure User
+1 - Create SurperUser
 
 2 - Add project Infos from admin page
 
